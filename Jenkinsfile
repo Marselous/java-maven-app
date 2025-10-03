@@ -2,8 +2,12 @@ def gv
 
 pipeline {   
     agent any
-    tools {
-        maven 'Maven'
+    parameters {
+        choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: '')
+        booleanParam(name: 'executeTests', defaultValue: true, description: 'Execute tests')
+    }
+    // tools {
+    //     maven 'Maven'
     }
     stages {
         stage("init") {
@@ -13,22 +17,45 @@ pipeline {
                 }
             }
         }
-        stage("build jar") {
+
+        stage("build") {
             steps {
                 script {
-                    gv.buildJar()
+                    gv.buildApp()
+                }
+            }
+        }
+
+        // stage("build jar") {
+        //     steps {
+        //         script {
+        //             gv.buildJar()
+
+        //         }
+        //     }
+        // }
+
+        stage("test") {
+            when {
+                expression {
+                    params.executeTests
+                }
+            }
+            steps {
+                script {
+                    gv.testApp()
 
                 }
             }
         }
 
-        stage("build image") {
-            steps {
-                script {
-                    gv.buildImage()
-                }
-            }
-        }
+        // stage("build image") {
+        //     steps {
+        //         script {
+        //             gv.buildImage()
+        //         }
+        //     }
+        // }
 
         stage("deploy") {
             steps {
