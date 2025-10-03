@@ -1,4 +1,4 @@
-// def gv
+def gv
 
 pipeline {   
     agent any
@@ -14,13 +14,13 @@ pipeline {
 
     stages {
 
-    //     stage("init") {
-    //         steps {
-    //             script {
-    //                 gv = load "script.groovy"
-    //             }
-    //         }
-    //     }
+        stage("init") {
+            steps {
+                script {
+                    gv = load "script.groovy"
+                }
+            }
+        }
 
     //     stage("build") {
     //         steps {
@@ -34,8 +34,8 @@ pipeline {
             steps {
                 script {
                     echo "Building the app..."
-                    sh 'mvn package'
-                    // gv.buildJar()
+                    // sh 'mvn package'
+                    gv.buildJar()
 
                 }
             }
@@ -58,12 +58,12 @@ pipeline {
             steps {
                 script {
                     echo "Building the docker image..."
-                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                        sh 'docker build -t justfreak/demo-app:jma-2.0 .'
-                        sh 'echo $PASS | docker login -u $USER --password-stdin'
-                        sh 'docker push justfreak/demo-app:jma-2.0'
-                    }
-                    // gv.buildImage()
+                    // withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                    //     sh 'docker build -t justfreak/demo-app:jma-2.0 .'
+                    //     sh 'echo $PASS | docker login -u $USER --password-stdin'
+                    //     sh 'docker push justfreak/demo-app:jma-2.0'
+                    // }
+                    gv.buildImage()
                 }
             }
         }
@@ -72,7 +72,7 @@ pipeline {
             steps {
                 script {
                     echo "Deploying the app..."
-                    // gv.deployApp()
+                    gv.deployApp()
                 }
             }
         }               
