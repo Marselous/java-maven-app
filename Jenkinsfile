@@ -1,68 +1,78 @@
-def gv
+// def gv
 
 pipeline {   
     agent any
-    parameters {
-        choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: '')
-        booleanParam(name: 'executeTests', defaultValue: true, description: 'Execute tests')
-    }
-    // tools {
-    //     maven 'Maven'
+
+    // parameters {
+    //     choice(name: 'VERSION', choices: ['1.1.0', '1.2.0', '1.3.0'], description: '')
+    //     booleanParam(name: 'executeTests', defaultValue: true, description: 'Execute tests')
     // }
+
+    tools {
+        maven 'maven-3.9.11'
+    }
+
     stages {
-        stage("init") {
+
+    //     stage("init") {
+    //         steps {
+    //             script {
+    //                 gv = load "script.groovy"
+    //             }
+    //         }
+    //     }
+
+    //     stage("build") {
+    //         steps {
+    //             script {
+    //                 gv.buildApp()
+    //             }
+    //         }
+    //     }
+
+        stage("build jar") {
             steps {
                 script {
-                    gv = load "script.groovy"
+                    echo "Building the app..."
+                    sh 'mvn package'
+                    // gv.buildJar()
+
                 }
             }
         }
 
-        stage("build") {
-            steps {
-                script {
-                    gv.buildApp()
-                }
-            }
-        }
-
-        // stage("build jar") {
+        // stage("test") {
+        //     when {
+        //         expression {
+        //             params.executeTests
+        //         }
+        //     }
         //     steps {
         //         script {
-        //             gv.buildJar()
-
+        //             gv.testApp()
         //         }
         //     }
         // }
 
-        stage("test") {
-            when {
-                expression {
-                    params.executeTests
-                }
-            }
+        stage("build image") {
             steps {
                 script {
-                    gv.testApp()
-
+                    echo "Building the docker image..."
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+                        sh 'docker build -t nanatwn/demo-app:jma-2.0 .'
+                        sh 'echo $PASS | docker login -u $USER --password-stdin'
+                        sh 'docker push nanatwn/demo-app:jma-2.0'
+                    }
+                    // gv.buildImage()
                 }
             }
         }
-
-        // stage("build image") {
-        //     steps {
-        //         script {
-        //             gv.buildImage()
-        //         }
-        //     }
-        // }
 
         stage("deploy") {
             steps {
                 script {
-                    env.ENV = input message: "Please confirm enviorment deploy to", ok: "Done", parameters: [choice(name: 'ONE', choices: ['dev', 'staging', 'prod'], description: '')]
-                    gv.deployApp()
-                    echo "Deploying to environment ${ENV}"
+                    echo "Deploying the app..."
+                    // gv.deployApp()
                 }
             }
         }               
