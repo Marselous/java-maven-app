@@ -1,4 +1,4 @@
-def gv
+// def gv
 
 pipeline {   
     agent any
@@ -8,71 +8,80 @@ pipeline {
     //     booleanParam(name: 'executeTests', defaultValue: true, description: 'Execute tests')
     // }
 
-    tools {
-        maven 'maven-3.9.11'
-    }
+    // tools {
+    //     maven 'maven-3.9.11'
+    // }
 
     stages {
 
-        stage("init") {
-            steps {
-                script {
-                    gv = load "script.groovy"
-                }
-            }
-        }
-
-    //     stage("build") {
-    //         steps {
-    //             script {
-    //                 gv.buildApp()
-    //             }
-    //         }
-    //     }
-
-        stage("build jar") {
-            steps {
-                script {
-                    echo "Building the app..."
-                    // sh 'mvn package'
-                    gv.buildJar()
-
-                }
-            }
-        }
-
-        // stage("test") {
-        //     when {
-        //         expression {
-        //             params.executeTests
-        //         }
-        //     }
+        // stage("init") {
         //     steps {
         //         script {
-        //             gv.testApp()
+        //             gv = load "script.groovy"
         //         }
         //     }
         // }
 
-        stage("build image") {
+
+
+        // stage("build jar") {
+        //     steps {
+        //         script {
+        //             echo "Building the app..."
+        //             // sh 'mvn package'
+        //             gv.buildJar()
+
+        //         }
+        //     }
+        // }
+
+        stage("test") {
             steps {
                 script {
-                    echo "Building the docker image..."
-                    // withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
-                    //     sh 'docker build -t justfreak/demo-app:jma-2.0 .'
-                    //     sh 'echo $PASS | docker login -u $USER --password-stdin'
-                    //     sh 'docker push justfreak/demo-app:jma-2.0'
-                    // }
-                    gv.buildImage()
+                    echo "Testing the app..."
+                    echo "Executing pipeline for branch $BRANCH_NAME"
+                    // gv.testApp()
                 }
             }
         }
 
+        stage("build") {
+            when {
+                expression {
+                    BRANCH_NAME == 'master'
+                }
+            }
+            steps {
+                script {
+                    gv.buildApp()
+                }
+            }
+        }
+
+        // stage("build image") {
+        //     steps {
+        //         script {
+        //             echo "Building the docker image..."
+        //             // withCredentials([usernamePassword(credentialsId: 'docker-hub-repo', passwordVariable: 'PASS', usernameVariable: 'USER')]) {
+        //             //     sh 'docker build -t justfreak/demo-app:jma-2.0 .'
+        //             //     sh 'echo $PASS | docker login -u $USER --password-stdin'
+        //             //     sh 'docker push justfreak/demo-app:jma-2.0'
+        //             // }
+        //             gv.buildImage()
+        //         }
+        //     }
+        // }
+
         stage("deploy") {
+            when {
+                expression {
+                    BRANCH_NAME == 'master'
+                }
+            }
             steps {
                 script {
                     echo "Deploying the app..."
-                    gv.deployApp()
+                    // gv.deployApp()
                 }
             }
         }               
