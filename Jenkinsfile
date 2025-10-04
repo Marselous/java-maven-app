@@ -1,3 +1,5 @@
+def gv
+
 pipeline {   
     agent any
     stages {
@@ -12,11 +14,25 @@ pipeline {
         }
 
         stage("build") {
-            when {
-                expression {
-                    BRANCH_NAME == 'master'
+            // when {
+            //     expression {
+            //         BRANCH_NAME == 'master'
+            //     }
+            // }
+            steps {
+                script {
+                    echo "Building the app..."
+                    // gv.buildApp()
                 }
             }
+        }
+
+        stage("build") {
+            // when {
+            //     expression {
+            //         BRANCH_NAME == 'master'
+            //     }
+            // }
             steps {
                 script {
                     echo "Building the app..."
