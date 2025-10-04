@@ -27,7 +27,6 @@ pipeline {
                     def version = matcher[0][1]
                     env.IMAGE_NAME = "$version-$BUILD_NUMBER"
                     // gv.checkoutCode()
-                    }
                 }
             }
         }
@@ -38,7 +37,6 @@ pipeline {
                     sh 'mvn clean package'
                     // sh 'mvn package'
                     // gv.buildJar()
-
                 }
             }
         }
