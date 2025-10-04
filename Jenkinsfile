@@ -88,8 +88,8 @@ pipeline {
                         sh 'git commit -m "ci: version bump"'
                         // sh 'git commit -m "Jenkins build: Bumped version to ${IMAGE_NAME}"'
                         sh 'git push origin HEAD:jenkins-jobs'
-                    // echo "Deploying the app..."
-                    // gv.deployApp()
+                        // gv.deployApp()
+                    }
                 }
             }
         }               
