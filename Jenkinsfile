@@ -31,7 +31,7 @@ pipeline {
             steps {
                 script {
                     echo "Building the docker image..."
-                    buildImage()
+                    buildImage 'justfreak/demo-app:jma-3.0'
                 }
             }
         }
