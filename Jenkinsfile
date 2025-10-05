@@ -7,7 +7,6 @@ pipeline {
     }
 
     stages {
-
         // stage("init") {
         //     steps {
         //         script {
@@ -30,6 +29,7 @@ pipeline {
                 }
             }
         }
+
         stage("build app") {
             steps {
                 script {
@@ -54,16 +54,7 @@ pipeline {
                     }
                 }
             }
-        }
-
-        // stage("deploy") {
-        //     steps {
-        //         script {
-        //             echo "Deploying the app..."
-        //             // gv.deployApp()
-        //         }
-        //     }
-        // }               
+        }             
         // stage("blank") {
         //     steps {
         //         script {
@@ -71,7 +62,8 @@ pipeline {
         //             // gv.deployApp()
         //         }
         //     }
-        // }               
+        // } 
+                      
         stage("commit version update") {
             steps {
                 script {
