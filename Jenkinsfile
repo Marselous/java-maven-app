@@ -54,7 +54,8 @@ pipeline {
                     }
                 }
             }
-        }             
+        }       
+              
         // stage("blank") {
         //     steps {
         //         script {
@@ -63,7 +64,7 @@ pipeline {
         //         }
         //     }
         // } 
-                      
+
         stage("commit version update") {
             steps {
                 script {
