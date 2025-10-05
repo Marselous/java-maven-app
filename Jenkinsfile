@@ -56,22 +56,22 @@ pipeline {
             }
         }
 
-        stage("deploy") {
-            steps {
-                script {
-                    echo "Deploying the app..."
-                    // gv.deployApp()
-                }
-            }
-        }               
-        stage("blank") {
-            steps {
-                script {
-                    echo "blank..."
-                    // gv.deployApp()
-                }
-            }
-        }               
+        // stage("deploy") {
+        //     steps {
+        //         script {
+        //             echo "Deploying the app..."
+        //             // gv.deployApp()
+        //         }
+        //     }
+        // }               
+        // stage("blank") {
+        //     steps {
+        //         script {
+        //             echo "blank..."
+        //             // gv.deployApp()
+        //         }
+        //     }
+        // }               
         stage("commit version update") {
             steps {
                 script {
