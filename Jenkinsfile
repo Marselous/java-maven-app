@@ -21,14 +21,13 @@ pipeline {
         // stage ("increment version") {
         //     steps {
         //         script {
-        //             echo "Incrementing app version..."
+        //             echo "incrementing app version..."
         //             sh 'mvn build-helper:parse-version versions:set \
         //             -DnewVersion=\\\${parsedVersion.majorVersion}.\\\${parsedVersion.minorVersion}.\\\${parsedVersion.nextIncrementalVersion} \
         //             versions:commit'
         //             def matcher = readFile('pom.xml') =~ '<version>(.+)</version>'
         //             def version = matcher[0][1]
         //             env.IMAGE_NAME = "$version-$BUILD_NUMBER"
-        //             // gv.checkoutCode()
         //         }
         //     }
         // }
@@ -36,7 +35,8 @@ pipeline {
         stage("build app") {
             steps {
                 script {
-                    echo "Building the app..."
+                    echo "building the app..."
+
                     buildJar()
                 }
             }
@@ -45,7 +45,8 @@ pipeline {
         stage("build image") {
             steps {
                 script {
-                    echo "Building the image..."
+                    echo "building the image..."
+
                     buildImage(env.IMAGE_NAME)
                     dockerLogin()
                     dockerPush(env.IMAGE_NAME)
@@ -80,11 +81,12 @@ pipeline {
                     echo "deploying docker image to remote-server..."
 
                     def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}" // set parameter to be passed to server-cmds.sh
+                    def destinationServer = "zerg@192.168.56.105"
 
                     sshagent(['ssh-key-jenkins']) {
-                        sh "scp server-cmds.sh zerg@192.168.56.105:/home/zerg"
-                        sh "scp docker-compose.yaml zerg@192.168.56.105:/home/zerg/apps/containers"
-                        sh "ssh -o StrictHostKeyChecking=no zerg@192.168.56.105 ${shellCmd}"
+                        sh "scp server-cmds.sh ${destinationServer}:/home/zerg"
+                        sh "scp docker-compose.yaml zerg@${destinationServer}:/home/zerg/apps/containers"
+                        sh "ssh -o StrictHostKeyChecking=no ${destinationServer} ${shellCmd}"
                     }
                 }
             }
