@@ -78,7 +78,7 @@ pipeline {
             steps {
                 script {
                     echo "deploying docker image to remote-server..."
-                    def shellCmd = "bash ./server-cmd.sh"
+                    def shellCmd = "bash ./server-cmds.sh"
                     // def dockerComposeCmd = "docker-compose -f /home/zerg/apps/containers/docker-compose.yaml up --detach"
                     // def dockerCmd = "docker run -d -p 3080:3080 --name java-app justfreak/demo-app:1.1.4-19"
                     sshagent(['ssh-key-jenkins']) {
