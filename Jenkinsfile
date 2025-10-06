@@ -78,15 +78,13 @@ pipeline {
             steps {
                 script {
                     echo "deploying docker image to remote-server..."
-                    def shellCmd = "bash ./server-cmds.sh"
-                    // def dockerComposeCmd = "docker-compose -f /home/zerg/apps/containers/docker-compose.yaml up --detach"
-                    // def dockerCmd = "docker run -d -p 3080:3080 --name java-app justfreak/demo-app:1.1.4-19"
+
+                    def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}" // set parameter to be passed to server-cmds.sh
+
                     sshagent(['ssh-key-jenkins']) {
                         sh "scp server-cmds.sh zerg@192.168.56.105:/home/zerg"
                         sh "scp docker-compose.yaml zerg@192.168.56.105:/home/zerg/apps/containers"
                         sh "ssh -o StrictHostKeyChecking=no zerg@192.168.56.105 ${shellCmd}"
-                        // sh "ssh -o StrictHostKeyChecking=no zerg@192.168.56.105 ${dockerComposeCmd}"
-                        // sh "ssh -o StrictHostKeyChecking=no zerg@192.168.56.105 ${dockerCmd}"
                     }
                 }
             }
