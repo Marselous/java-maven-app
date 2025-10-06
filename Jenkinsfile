@@ -80,7 +80,7 @@ pipeline {
                     echo "deploying docker image to remote-server..."
                     def dockerComposeCmd = "docker-compose -f docker-compose.yaml up --detach"
                     // def dockerCmd = "docker run -d -p 3080:3080 --name java-app justfreak/demo-app:1.1.4-19"
-                    sshagent(['ssh-srv5-key']) {
+                    sshagent(['ssh-key-jenkins']) {
                         scp "scp docker-compose.yaml zerg@192.168.56.105:/home/zerg/apps/containers"
                         sh "ssh -o StrictHostKeyChecking=no zerg@192.168.56.105 ${dockerComposeCmd}"
                         // sh "ssh -o StrictHostKeyChecking=no zerg@192.168.56.105 ${dockerCmd}"
