@@ -85,7 +85,7 @@ pipeline {
 
                     sshagent(['ssh-key-jenkins']) {
                         sh "scp server-cmds.sh ${destinationServer}:/home/zerg"
-                        sh "scp docker-compose.yaml zerg@${destinationServer}:/home/zerg/apps/containers"
+                        sh "scp docker-compose.yaml ${destinationServer}:/home/zerg/apps/containers"
                         sh "ssh -o StrictHostKeyChecking=no ${destinationServer} ${shellCmd}"
                     }
                 }
