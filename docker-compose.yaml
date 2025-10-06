@@ -1,9 +1,11 @@
 version: '3.8'
+
 services:
   java-maven-app:
     image: justfreak/demo-app:1.1.4-19
     ports:
       - "8080:8080"
+  
   postgres:
     image: postgres:15
     ports:
@@ -12,3 +14,6 @@ services:
       - POSTGRES_PASSWORD=postgres
     volumes:
       - db-data:/var/lib/postgresql/data
+
+volumes:
+  db-data:
