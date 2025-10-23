@@ -55,14 +55,18 @@ pipeline {
         }       
         
         stage("deploy") {
-            environment {
-                AWS_ACCESS_KEY_ID = credentials('jenkins-aws-access-key-id')
-                AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
-            }
+            // environment {
+            //     AWS_ACCESS_KEY_ID = credentials('jenkins-aws-access-key-id')
+            //     AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+            // }
             steps {
                 script {
                     echo "deploying docker image to remote-server..."
-                    sh 'kubectl create deployment nginx-deployment --image=nginx'
+                    withKubeConfig([credentialsId: 'kubeconfig-jenkins', serverUrl: 'https://kubernetes.docker.internal:6443']) {
+                        sh 'kubectl create deployment nginx-deployment --image=nginx'
+                        echo '...docker image deployed to remote-server'
+                    }
+                    
 
                     // def shellCmd = "bash ./server-cmds.sh ${IMAGE_NAME}" // set parameter to be passed to server-cmds.sh
                     // def destinationServer = "zerg@192.168.56.105"
