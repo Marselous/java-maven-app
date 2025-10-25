@@ -62,9 +62,11 @@ pipeline {
             steps {
                 script {
                     echo "deploying docker image to remote-server..."
-                    withKubeConfig([credentialsId: 'kubeconfig-jenkins', serverUrl: 'https://kubernetes.docker.internal:6443']) {
+                    withKubeConfig([credentialsId: 'kubeconfig-jenkins', serverUrl: 'https://192.168.56.110:8443']) {
+                    // withKubeConfig([credentialsId: 'kubeconfig-jenkins', serverUrl: 'https://kubernetes.docker.internal:6443']) {
                         sh 'kubectl create deployment nginx-deployment --image=nginx'
                         echo '...docker image deployed to remote-server'
+                        
                     }
                     
 
